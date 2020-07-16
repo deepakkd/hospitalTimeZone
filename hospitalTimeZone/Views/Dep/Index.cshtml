@@ -1,0 +1,94 @@
+﻿@model hospitalTimeZone.View_Model.DoctorVM
+ 
+@{
+    ViewBag.Title = "Index";
+}
+<link href="~/hospital.css" rel="stylesheet" />
+<h2>Hospital Time Zone </h2>
+
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+<script src="~/Scripts/modernizr-2.6.2.js"></script>
+
+Department @Html.DropDownList("var1","Select Department")
+Doctor @Html.DropDownList("var2","Select Doctor")
+<style type="text/css">
+    .inv {
+        visibility: hidden;
+    }
+
+    .vis {
+        visibility: visible;
+    }
+</style>
+
+<div style="display:none;" id="div1">
+    @Html.Partial("~/Views/Dep/timespent.cshtml",Model)
+
+</div>
+@*<div class="vis" id="div2">
+    @Html.Partial("~/Views/Dep/timespent.cshtml")
+
+</div>*@
+@*@Html.Partial("~/Views/Dep/timespent.cshtml")*@
+
+
+<script type="text/javascript">
+    $(function () {
+        $("#var1").change(function () {
+            var name = $("#var1").val();
+            var url = '/Dep/Doctor';
+            var data = { "name": name };
+            $.post(url, data, function (data) {
+                var items = [];
+                items.push("<option value=" + 0 + ">" + "Select Doctor" + "</option>");
+
+                for (var i = 0; i < data.length; i++) {
+                    items.push("<option value=" + data[i].Value + ">" + data[i].Text + "</option>");
+                }
+                $("#var2").html(items.join(''));
+            })
+        });
+    });
+</script>
+
+<script type="text/javascript">
+    //$("#var2").change(function ()
+    //{
+    //    var SelectedText = $(this).find(":selected ").text();
+    //    var SelectedValue = $(this).val();
+    //    $("#var2").text(SelectedText);
+       
+    //    type: 'post';
+    //    url: '/Dep/timespent';
+
+    //});
+    $(document).ready(function () {
+        $(function () {
+            $("#var2").change(function () {
+                var Id = $("#var2").val();
+                var url = '/Dep/timespent';
+                var data = { "id": Id };
+                $.ajax({
+                    url: url,
+                    data: data,
+                    success: function (result) {
+                        document.getElementById('div1').style.display = "block";
+                        $("#div1").html('');
+                        $("#div1").html(result);
+                    }
+                })
+
+
+            });
+        });
+       
+    });
+</script>
+
+
+
+
+
+
+
+

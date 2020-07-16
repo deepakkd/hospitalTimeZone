@@ -1,0 +1,263 @@
+﻿@model  hospitalTimeZone.View_Model.DoctorVM
+@{
+    ViewBag.Title = "JsonView";
+
+
+}
+
+<script src="~/scripts/jquery-1.10.2.min.js"></script>
+<script src="~/scripts/modernizr-2.6.2.js"></script>
+<div>
+
+    <table id="tblTimeSpent" class="table table-bordered table-responsive table-hover">
+        <thead>
+            <tr style="background-color:moccasin" >
+                <th>Sun</th>
+                <th>Mon </th>
+                <th>Tues</th>
+                <th>Wed</th>
+                <th>Thus</th>
+                <th>Fri</th>
+                <th>Sat</th>
+                <th>Total Time</th>
+                <th>Action</th>
+
+            </tr>
+        </thead>
+        <tbody id="addnewrow">
+
+            @if (Model.Timepents.Count() != 0)
+            {
+                var d = 0;
+                foreach (var a in Model.Timepents)
+                {
+                    d++;
+                    var DynamicClass = "display" + d;
+                    <tr class="xyz">
+                        <td >
+                            <input type="hidden" id="@string.Concat("TimeSpentID",d)" value="@a.TimeSpentID" />
+                            <input type="text" onkeypress="return (event.charCode !=8 && event.charCode ==0 || ( event.charCode == 46 || (event.charCode >= 48 && event.charCode <= 57)))" maxlength="2" size="3" id="@string.Concat("Sun",d)" data-id="@d" disabled class="co @DynamicClass" value="@a.Sun" />
+
+                        </td>
+                        <td >
+
+                            <input type="text" onkeypress="return (event.charCode !=8 && event.charCode ==0 || ( event.charCode == 46 || (event.charCode >= 48 && event.charCode <= 57)))" maxlength="2" size="3" id="@string.Concat("Mon",d)" data-id="@d" disabled class="co @DynamicClass" value="@a.Mon" />
+
+                        </td>
+                        <td >
+
+                            <input type="text" onkeypress="return (event.charCode !=8 && event.charCode ==0 || ( event.charCode == 46 || (event.charCode >= 48 && event.charCode <= 57)))"  maxlength="2" size="3" id="@string.Concat("Tue",d)" data-id="@d" disabled class="co @DynamicClass" value="@a.Tue" />
+
+                        </td>
+                        <td >
+
+                            <input type="text" onkeypress="return (event.charCode !=8 && event.charCode ==0 || ( event.charCode == 46 || (event.charCode >= 48 && event.charCode <= 57)))" maxlength="2" size="3" id="@string.Concat("Wed",d)" data-id="@d" disabled class="co @DynamicClass" value="@a.Wed" />
+
+                        </td>
+                        <td >
+
+                            <input type="text" onkeypress="return (event.charCode !=8 && event.charCode ==0 || ( event.charCode == 46 || (event.charCode >= 48 && event.charCode <= 57)))" maxlength="2" size="3" id="@string.Concat("Thus",d)" data-id="@d" disabled class="co @DynamicClass" value="@a.Thus " />
+
+                        </td>
+                        <td >
+
+                            <input type="text" onkeypress="return (event.charCode !=8 && event.charCode ==0 || ( event.charCode == 46 || (event.charCode >= 48 && event.charCode <= 57)))" maxlength="2" size="3" id="@string.Concat("Fri",d)" data-id="@d" disabled class="co @DynamicClass" value="@a.Fri" />
+
+                        </td>
+
+                        <td >
+                            <input type="text" onkeypress="return (event.charCode !=8 && event.charCode ==0 || ( event.charCode == 46 || (event.charCode >= 48 && event.charCode <= 57)))" maxlength="2" size="3" id="@string.Concat("Sat",d)" data-id="@d" disabled class="co @DynamicClass" value="@a.Sat" />
+
+                        </td>
+                        <td>
+                            <input id="@string.Concat("TotalTime",d)" data-id="@d" disabled size="3" @a.TotalTime class="@string.Concat("totaltime",d) " value="@a.TotalTime"/>
+                        </td>
+                        <td>
+                            <button data-id="@d" class="Edit">Edit</button>
+                            <button class=" Cancel">Cancel</button>
+                            <button data-id="@d" class="Save">Update</button>
+                            <button data-id="@d" style="background-color:red" onclick="deleteFunction()" class="Delete">Delete</button>
+                        </td>
+
+                    </tr>
+
+                }
+            }
+        </tbody>
+        <tfoot>
+            <tr>
+                <td>
+                    <input type="button" class="btnadd" name="addbutton" value="Add " size="3" />
+                </td>
+               
+
+            </tr>
+        </tfoot>
+    </table>
+    
+
+
+
+</div>
+<script type="text/javascript">
+
+    
+    $(function () {
+        //For edit
+        $('.Edit').on('click', function () {
+
+            $('.co').prop('disabled', true);
+            //var id = $(this.element).data("id");
+            var dataId = $(this).attr("data-id");
+            $('.display' + dataId).prop('disabled', false);
+
+        });
+
+    });
+    //For cancel
+    $(function () {
+        $('.Cancel').on('click', function () {
+            $('.co').prop('disabled', true);
+            var id = $(this.element).data("id");
+            var dataID = $(this).attr("data-id");
+            $('.display' + dataId).prop('disabled', false)
+        });
+    });
+
+
+</script>
+<script type="text/javascript">
+    //FOR UPDATE
+    $(document).ready(function () {
+        $('.Save').on('click', function () {
+            
+            var dataId = $(this).attr("data-id");
+            var TimeSpentID = $("#TimeSpentID" + dataId).val();
+            var Sun = $("#Sun" + dataId).val();
+            var Mon = $("#Mon" + dataId).val();
+            var Tue = $("#Tue" + dataId).val();
+            var Wed = $("#Wed" + dataId).val();
+            var Thus = $("#Thus" + dataId).val();
+            var Fri = $("#Fri" + dataId).val();
+            var Sat = $("#Sat" + dataId).val();
+            var TotalTime = $("#TotalTime" + dataId).val();
+            var url = '/Dep/Update';
+            var data = { "Sun": Sun, "Mon": Mon, "Tue": Tue, "Wed": Wed, "Thus": Thus, "Fri": Fri, "Sat": Sat, "TotalTime": TotalTime, "TimeSpentID": TimeSpentID};
+            $.post(url, data, function (data) {
+                success: alert("Data Updated")
+                if (data.Success) {
+                    location.reload(true);
+                }
+            })
+
+        });
+    });
+
+</script>
+
+<script type="text/javascript">
+    //For Total Sum
+    $(document).ready(function () {
+        FillText();
+    });
+    $(document).ready(function () {
+        $(".btnadd").click(function () {
+            var i = 1;
+            $('.xyz').each(function () {
+                i = i + 1;
+            });
+
+            var x = "<tr class='xyz'><td><input type='text' id='Sun' onkeypress='return (event.charCode != 8 && event.charCode == 0 || (event.charCode == 46 || (event.charCode >= 48 && event.charCode <= 57)))' maxlength='2' size='3' data-id='did' class='co display'/></td><input type='text' maxlength='2' size='3' data-id='did' class='co display'/><td><input type='text' id='Mon' onkeypress='return (event.charCode != 8 && event.charCode == 0 || (event.charCode == 46 || (event.charCode >= 48 && event.charCode <= 57)))' maxlength='2' size='3'  data-id='did' class='co display'/></td><td><input type='text' maxlength='2' onkeypress='return (event.charCode != 8 && event.charCode == 0 || (event.charCode == 46 || (event.charCode >= 48 && event.charCode <= 57)))' size='3' id='Tue'  data-id='did' class='co display'/></td><td><input type='text' maxlength='2'   onkeypress='return (event.charCode !=8 && event.charCode ==0 || ( event.charCode == 46 || (event.charCode >= 48 && event.charCode <= 57)))' id='Wed' size='3'  data-id='did' class='co display'/></td><td><input type='text' maxlength='2' id='Thus'   onkeypress='return (event.charCode !=8 && event.charCode ==0 || ( event.charCode == 46 || (event.charCode >= 48 && event.charCode <= 57)))' size='3'  data-id='did' class='co display'/></td><td><input type='text' maxlength='2' size='3'   onkeypress='return (event.charCode !=8 && event.charCode ==0 || ( event.charCode == 46 || (event.charCode >= 48 && event.charCode <= 57)))' id='Fri' data-id='did' class='co display'/></td><td><input type='text' maxlength='2' size='3'   onkeypress='return (event.charCode !=8 && event.charCode ==0 || ( event.charCode == 46 || (event.charCode >= 48 && event.charCode <= 57)))' id='Sat'  data-id='did' class='co display'/></td><td><input type='text' maxlength='2' size='3' disabled  data-id='did' id='allday' class='total'/></td><td> <button data-id='did' class='Submit' >Submit</button></td></tr>";
+            var x1 = x.replace(/did/g, i);
+            x1 = x1.replace(/display/g, 'display' + i);
+            x1 = x1.replace(/total/g, 'totaltime' + i);
+            x1 = x1.replace(/Sun/g, 'Sun' + i);
+            x1 = x1.replace(/Mon/g, 'Mon' + i);
+            x1 = x1.replace(/Tue/g, 'Tue' + i);
+            x1 = x1.replace(/Wed/g, 'Wed' + i);
+            x1 = x1.replace(/Thus/g, 'Thus' + i);
+            x1 = x1.replace(/Fri/g, 'Fri' + i);
+            x1 = x1.replace(/Sat/g, 'Sat' + i);
+            x1 = x1.replace(/allday/g, 'TotalTime' + i);
+            $("#addnewrow").append(x1);
+            FillText();
+
+            $(".Submit").click(function () {
+                var dataId = $(this).attr("data-id");
+                var DoctorId = $("#var2").val();
+                var DptmId = $("#var1").val();
+
+                var Sun = $("#Sun" + dataId).val();
+                var Mon = $("#Mon" + dataId).val();
+                var Tue = $("#Tue" + dataId).val();
+                var Wed = $("#Wed" + dataId).val();
+                var Thus = $("#Thus" + dataId).val();
+                var Fri = $("#Fri" + dataId).val();
+                var Sat = $("#Sat" + dataId).val();
+                var TotalTime = $("#TotalTime" + dataId).val();
+                var url = '/Dep/Submit';
+                var data = {
+                    "Sun": Sun, "Mon": Mon, "Tue": Tue, "Wed": Wed, "Thus": Thus, "Fri": Fri, "Sat": Sat, "TotalTime": TotalTime, "DoctorId": DoctorId, "DptmId": DptmId
+                };
+                $.post(url, data, function (data) {
+                    alert("Submitted Successfully")
+                    //document.getElementById('div1').style.display = "block";
+                    $("#div1").html('');
+                    $("#div1").html(result);
+                })
+            });
+
+
+
+        });
+
+
+    });
+    function FillText() {
+        var i = 0;
+        var sum = 0;
+        $(".co").on('keyup', function () {
+           i = $(this).attr("data-id");
+            sum = 0;
+            $(".display" + i).each(function () {
+                if (!isNaN(this.value) && this.value.length != 0) {
+                    sum += parseInt(this.value);
+                }
+                else {
+
+                }
+            });
+            $(".totaltime" + i).val(sum);
+        });
+    }
+    
+</script>
+<script type="text/javascript">
+    $(document).ready(function () {
+    
+        $('.Delete').on('click', function () {
+            if (confirm("Want to Delete?")) {
+
+                var dataId = $(this).attr("data-id");
+                var TimeSpentID = $("#TimeSpentID" + dataId).val();
+                var url = '/Dep/Delete';
+                var data = { "id": TimeSpentID }
+                $.post(url, data, function (data) {
+                    success: alert("Data Deleted");
+                    if (data.Success) {
+                        location.reload(true);
+                        // $('#Delete').click();
+                    }
+                })
+            }
+            else {
+                return false;
+            }
+
+
+            });
+
+    });  
+</script>
+
+

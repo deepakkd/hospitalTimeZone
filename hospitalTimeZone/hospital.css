@@ -1,0 +1,21 @@
+﻿body {
+    .oddRowStyle
+
+{
+    background-color: #00CCFF;
+    color: #FFFFFF;
+}
+
+.evenRowStyle {
+    background-color: #CCCCCC;
+}
+
+.tfootrow {
+    background-color: #3366CC;
+    color: #FFFFFF;
+}
+
+    .tfootrow a {
+        color: #FFFFFF;
+    }
+}
